@@ -1,6 +1,6 @@
 {
 	"name": "osu-peru-bot",
-	"version": "0.0.1",
+	"version": "1.0",
 	"description": "osu! Discord Bot",
 	"main": "build/server/index.js",
 	"scripts": {
