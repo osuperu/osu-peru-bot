@@ -53,7 +53,7 @@ sudo nano /etc/systemd/system/osuperubot.service
 Description=osu!Peru Bot Service
 
 [Service]
-ExecStart=/usr/bin/npm run start --prefix /folder/where/the/file/is/located
+ExecStart=/usr/bin/npm run start --prefix /path/to/the/project
 Restart=always
 
 [Install]
