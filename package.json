@@ -11,6 +11,10 @@
 		"build:server": "tsc -p tsconfig.server.json",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/osuperu/osu-peru-bot.git"
+	},
 	"author": "FlyingCat-X",
 	"license": "GPL-3.0-only",
 	"dependencies": {
