@@ -1,0 +1,15 @@
+{
+    "header": {
+        "nav":{
+            "home": "Inicio",
+            "events": "Eventos",
+            "about": "Acerca de"
+        },
+		"login-box": {
+            "discord": " Vincular cuenta de discord",
+            "osu": " Vincular cuenta de osu!",
+            "delink": " Desvincular",
+            "login": " Iniciar sesion"
+        }
+    }
+}

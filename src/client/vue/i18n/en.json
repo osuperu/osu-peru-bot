@@ -1,0 +1,15 @@
+{
+	"header": {
+		"nav": {
+			"home": "Home",
+			"events": "Events",
+			"about": "About"
+		},
+		"login-box": {
+            "discord": " Link osu! account",
+            "osu": " Link discord account",
+            "delink": " Delink",
+			"login": " Login"
+        }
+	}
+}

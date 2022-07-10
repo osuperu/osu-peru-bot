@@ -1,0 +1,10 @@
+# NodeJS files
+.cache/
+build/
+data/
+dist/
+node_modules/
+
+# Project files
+.vscode
+config.json

@@ -1,0 +1,64 @@
+{
+    "http": {
+        "host": "127.0.0.1",
+        "port": 5000,
+        "publicUrl": "http://127.0.0.1:5000"
+    },
+    "locale": {
+        "default": "es",
+        "fallback": "es"
+    },
+    "osu": {
+        "oauth": {
+            "clientID": "PUT_YOUR_CLIENT_ID_HERE",
+            "clientSecret": "PUT_YOUR_SECRET_HERE"
+        }
+    },
+    "discord": {
+        "oauth": {
+            "clientID": "PUT_YOUR_CLIENT_ID_HERE",
+            "clientSecret": "PUT_YOUR_SECRET_HERE"
+        },
+        "token": "PUT_YOUR_TOKEN_HERE",
+        "guildID": "PUT_YOUR_GUILD_ID_HERE",
+        "logChannel": "PUT_YOUR_LOG_CHANNEL_ID_HERE",
+        "roles": {
+            "verifiedRole": "PUT_YOUR_ROLE_ID_HERE",
+            "groupRoles": {
+                "gmt": "PUT_YOUR_ROLE_ID_HERE",
+                "bng": "PUT_YOUR_ROLE_ID_HERE",
+                "nat": "PUT_YOUR_ROLE_ID_HERE",
+                "alumni": "PUT_YOUR_ROLE_ID_HERE"
+            },
+            "playModeRoles": {
+                "osu": "PUT_YOUR_ROLE_ID_HERE",
+                "mania": "PUT_YOUR_ROLE_ID_HERE",
+                "taiko": "PUT_YOUR_ROLE_ID_HERE",
+                "fruits": "PUT_YOUR_ROLE_ID_HERE"
+            },
+            "rankedMapper": "PUT_YOUR_ROLE_ID_HERE",
+            "isRestricted": "PUT_YOUR_ROLE_ID_HERE",
+            "foreigner": "PUT_YOUR_ROLE_ID_HERE"
+        }
+    },
+    "mongo": {
+        "uri": "mongodb://127.0.0.1:27017/osuperuauth",
+        "backupDir": "./data/backups"
+    },
+    "misc": {
+        "timezone": "America/Lima",
+        "defaultCountryCode": "PE",
+        "cooldownDuration": 86400000
+    },
+    "logs": {
+        "color": {
+            "info": "17A2B8",
+            "success": "28A745",
+            "warn": "FFC107",
+            "error": "DC3545"
+        }
+    },
+    "session": {
+        "secret": "secretPass"
+    }
+}
