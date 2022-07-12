@@ -1,15 +1,17 @@
-import discord, { DiscordAPIError, CommandInteraction } from "discord.js";
+import discord, { DiscordAPIError, CommandInteraction, Message } from "discord.js";
 import { LogEntry } from "winston";
 
 import { Logger } from '../util/logger';
 import { App } from "../app";
 
 import { CommandsManager } from "./commands-manager";
+import { MessageManager } from "./message-manager";
 
 export class DiscordClient {
 	discordClient: discord.Client;
 	logChannel!: discord.TextChannel;
 	commandManager: CommandsManager;
+	messageManager: MessageManager;
 
 	constructor() {
 		this.discordClient = new discord.Client({
@@ -25,6 +27,8 @@ export class DiscordClient {
             ]
         });
         this.commandManager = new CommandsManager();
+		this.messageManager = new MessageManager();
+		
         this.discordClient.on("ready", () => {
             this.commandManager.init();
         });
@@ -33,6 +37,10 @@ export class DiscordClient {
             if (!interaction.isCommand) return;
             await this.commandManager.handleInteractions(interaction as CommandInteraction);
         });
+
+		this.discordClient.on("messageCreate", async message => {
+			await this.messageManager.handleMessage(message as Message);
+		});
 	}
 
 	async start(token: string): Promise<void> {
