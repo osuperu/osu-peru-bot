@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import { CodeExchangeSchema } from "../models/schemas/osu-api-info-schema";
-import { Misc } from "../util/misc"
+import { OCodeExchange } from "../../models/osu-api/oauth-access";
+import { Misc } from "../misc"
 import { DateTime } from "luxon";
 
-import { App } from "../app";
+import { App } from "../../app";
 
 export class OsuApi {
 	static async refreshAccessToken(refresh_token: string): Promise<unknown> {
@@ -35,7 +35,7 @@ export class OsuApi {
 
     static async refreshClientCredential(): Promise<void> {
         if(Math.abs(App.instance.clientCredential.lastFetched.diffNow("days").days) < 0.95) return;
-        const response = (await axios.post<CodeExchangeSchema>("https://osu.ppy.sh/oauth/token", {
+        const response = (await axios.post<OCodeExchange>("https://osu.ppy.sh/oauth/token", {
             grant_type: 'client_credentials',
             scope: "public",
             client_id: App.instance.config.osu.oauth.clientID,
@@ -63,6 +63,14 @@ export class OsuApi {
 			}`,
 			accessToken: App.instance.clientCredential.token,
 		});
+    }
+
+	static async fetchUserRecentPlay(userid: number, gamemode: "osu" | "mania" | "fruits" | "taiko", limit: number, offset: number, includeFails:"0" | "1"): Promise<unknown> {
+        await this.refreshClientCredential();
+        return this.request({
+            endpoint: `/users/${userid}/scores/recent?include_fails=${includeFails}&mode=${gamemode}&limit=${limit}&offset=${offset}`,
+            accessToken: App.instance.clientCredential.token,
+        });
     }
 }
 
