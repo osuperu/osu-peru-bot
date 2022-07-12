@@ -1,5 +1,5 @@
 import { MessageOptions } from "discord.js";
 
 export interface CommandResponse {
-	getMessage(...args: unknown[]): MessageOptions;
+	getMessage(...args: unknown[]): MessageOptions | Promise<MessageOptions>;
 }

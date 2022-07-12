@@ -17,7 +17,8 @@
 	],
 	"include": [
 		"src/server/scripts/*.ts",
-		"src/server/discord/commands/*.ts"
+		"src/server/discord/commands/*.ts",
+		"src/server/discord/events/message-create/*.ts"
 	],
     "exclude": ["build", "data", "dist", "node_modules", ".cache"]
 }

@@ -5,13 +5,13 @@ import { Logger } from '../util/logger';
 import { App } from "../app";
 
 import { CommandsManager } from "./commands-manager";
-import { MessageManager } from "./message-manager";
+import { MessageCreateManager } from "./message-create-manager";
 
 export class DiscordClient {
 	discordClient: discord.Client;
 	logChannel!: discord.TextChannel;
 	commandManager: CommandsManager;
-	messageManager: MessageManager;
+	messageCreateManager: MessageCreateManager;
 
 	constructor() {
 		this.discordClient = new discord.Client({
@@ -27,7 +27,7 @@ export class DiscordClient {
             ]
         });
         this.commandManager = new CommandsManager();
-		this.messageManager = new MessageManager();
+		this.messageCreateManager = new MessageCreateManager();
 		
         this.discordClient.on("ready", () => {
             this.commandManager.init();
@@ -39,7 +39,7 @@ export class DiscordClient {
         });
 
 		this.discordClient.on("messageCreate", async message => {
-			await this.messageManager.handleMessage(message as Message);
+			await this.messageCreateManager.handleMessage(message as Message);
 		});
 	}
 
