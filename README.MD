@@ -7,6 +7,7 @@
 
 ## Requeriments
 - Node.js v16 or higher (Tested on v18.4.0)
+- Yarn (Tested on v1.22.19)
 - MongoDB v4 or higher (Tested on v5.0.9)
 - Discord application with enabled bot account which can be created from [here](https://discord.com/developers/applications)
 - osu! OAuth application which can be created from [here](https://osu.ppy.sh/home/account/edit)
@@ -21,7 +22,7 @@ git clone https://github.com/osuperu/osu-peru-bot.git && cd osu-peru-bot
 ```
 - Install the needed dependencies
 ```sh
-npm install
+yarn install
 ```
 - Copy the configuration template `config.default.json` as `config.json`.
 ```sh
@@ -33,11 +34,11 @@ nano config.json
 ```
 - Build the client and the server.
 ```sh
-npm run build:client && npm run build:server
+yarn run build:client && yarn run build:server
 ```
 - Finally, you can start the project.
 ```sh
-npm run start
+yarn run start
 ```
 
 <br>
