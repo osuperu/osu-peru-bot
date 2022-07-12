@@ -1,10 +1,11 @@
 import { MessageOptions } from "discord.js";
 import { CommandResponse } from "../../models/command-response";
-import { OUserSchema } from "../../models/schemas/osu-api-info-schema";
+import { OUser } from "../../models/osu-api/user";
 import { Misc } from "../../util/misc";
+import { OGamemodeName } from "../../models/osu-api/gamemode";
 
 export class OsuStatsResponse implements CommandResponse {
-	getMessage(user: OUserSchema, gamemode: "osu" | "mania" | "fruits" | "taiko"): MessageOptions {
+	getMessage(user: OUser, gamemode: OGamemodeName): MessageOptions {
 		return {
 			embeds: [
 				{

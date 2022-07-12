@@ -1,8 +1,8 @@
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
 import { User } from "../../models/user";
-import { OUserSchema } from "../../models/schemas/osu-api-info-schema";
+import { OUser } from "../../models/osu-api/user";
 import { OsuStatsResponse } from "../responses/osu-stats-response";
-import { OsuApi } from "../../util/osu-api";
+import { OsuApi } from "../../util/api/osu-api";
 
 export default <SlashCommand>{
 	commandEnum: "OSUSTATS",
@@ -14,6 +14,13 @@ export default <SlashCommand>{
 			description:
 				"Nombre de usuario o ID del jugador cuyas estadísticas quieres ver",
 			type: "STRING",
+			required: false,
+		},
+		{
+			name: "discord",
+			description:
+				"Especifica un usuario de discord verificado en el servidor",
+			type: "USER",
 			required: false,
 		},
 		{
@@ -40,14 +47,7 @@ export default <SlashCommand>{
 				},
 			],
 			required: false,
-		},
-		{
-			name: "discord",
-			description:
-				"Especifica un usuario de discord verificado en el servidor",
-			type: "USER",
-			required: false,
-		},
+		}
 	],
 	async call({ interaction }): Promise<SlashCommandReturn> {
 		try {
@@ -59,7 +59,7 @@ export default <SlashCommand>{
             const ret = (await OsuApi.fetchUserPublic(
                 user,
                 gamemode
-            )) as OUserSchema;
+            )) as OUser;
     
             if (!userDb) {
                 return {
