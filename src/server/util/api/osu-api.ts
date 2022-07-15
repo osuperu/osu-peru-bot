@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { OCodeExchange } from "../../models/osu-api/oauth-access";
+import { OGamemodeName } from "../../models/osu-api/gamemode";
 import { Misc } from "../misc"
 import { DateTime } from "luxon";
 
@@ -48,29 +49,45 @@ export class OsuApi {
         };
     }
 
-	static async fetchUser(user?: string, accessToken?: string, gameMode?: string): Promise<unknown> {
+	static async fetchUser(user?: string, accessToken?: string, gamemode?: OGamemodeName): Promise<unknown> {
         return await this.request({
-            endpoint: `${user ? `/users/${user}` : "/me"}${gameMode ? `/${gameMode}` : ""}`,
+            endpoint: `${user ? `/users/${user}` : "/me"}${gamemode ? `/${gamemode}` : ""}`,
             accessToken,
         });
     }
 
-	static async fetchUserPublic(userid: string, gamemode: "osu" | "mania" | "fruits" | "taiko"): Promise<unknown> {
+	static async fetchUserPublic(userID: string, gamemode: OGamemodeName): Promise<unknown> {
         await this.refreshClientCredential();
 		return this.request({
-			endpoint: `/users/${userid}/${gamemode}${
-				Misc.isNumeric(userid) ? "" : "?key=username"
+			endpoint: `/users/${userID}/${gamemode}${
+				Misc.isNumeric(userID) ? "" : "?key=username"
 			}`,
 			accessToken: App.instance.clientCredential.token,
 		});
     }
 
-	static async fetchUserRecentPlay(userid: number, gamemode: "osu" | "mania" | "fruits" | "taiko", limit: number, offset: number, includeFails:"0" | "1"): Promise<unknown> {
+	static async fetchUserRecentPlay(userid: number, gamemode: OGamemodeName, limit: number, offset: number, includeFails:"0" | "1"): Promise<unknown> {
         await this.refreshClientCredential();
         return this.request({
             endpoint: `/users/${userid}/scores/recent?include_fails=${includeFails}&mode=${gamemode}&limit=${limit}&offset=${offset}`,
             accessToken: App.instance.clientCredential.token,
         });
     }
+
+	static async fetchUserBeatmapScores(beatmapID: number, userID: number, gamemode?: OGamemodeName): Promise<unknown> {
+		await this.refreshClientCredential();
+		return this.request({
+			endpoint: `/beatmaps/${beatmapID}/scores/users/${userID}/all?mode=${gamemode}`,
+			accessToken: App.instance.clientCredential.token
+		});
+	}
+
+	static async fetchBeatmap(beatmapID: number): Promise<unknown> {
+		await this.refreshClientCredential();
+		return this.request({
+			endpoint: `/beatmaps/${beatmapID}`,
+			accessToken: App.instance.clientCredential.token
+		});
+	}
 }
 
