@@ -2,8 +2,9 @@ import { RankedStatus } from "./ranked-status"
 import { OGamemode } from "./gamemode"
 import { Failtimes } from "./failtimes"
 import type { OUser, OUserCompact } from "./user";
+import { Timestamp } from "./timestamp";
 
-export interface Beatmap extends BeatmapCompact {
+export interface OBeatmap extends OBeatmapCompact {
 	accuracy: number;
 	ar: number;
 	beatmapset_id: number;
@@ -14,11 +15,11 @@ export interface Beatmap extends BeatmapCompact {
 	count_sliders: number;
 	count_spinners: number;
 	cs: number;
-	deleted_at?: Date;
+	deleted_at?: Timestamp;
 	drain: number;
 	hit_length: number;
 	is_scoreable: boolean;
-	last_updated: Date;
+	last_updated: Timestamp;
 	mode_int: number;
 	passcount: number;
 	playcount: number;
@@ -26,49 +27,49 @@ export interface Beatmap extends BeatmapCompact {
 	url: string;
 }
 
-export interface BeatmapCompact {
+export interface OBeatmapCompact {
 	difficulty_rating: number;
 	id: number;
 	mode: OGamemode;
 	status: string;
 	total_length: number;
 	version: string;
-	beatmapset?: null | Beatmapset;
+	beatmapset?: null | OBeatmapset;
 	checksum?: string;
 	failtimes?: Failtimes;
 	max_combo?: number;
 }
 
-export interface Beatmapset extends BeatmapsetCompactBase {
-	availability: BeatmapsetCompactAvailability;
+export interface OBeatmapset extends OBeatmapsetCompactBase {
+	availability: OBeatmapsetCompactAvailability;
 	bpm: number;
 	can_be_hyped: boolean;
 	creator: string;
 	discussion_enabled: boolean;
 	discussion_locked: boolean;
-	hype: null | BeatmapsetCompactHype;
+	hype: null | OBeatmapsetCompactHype;
 	is_scoreable: boolean;
-	last_updated: Date;
+	last_updated: Timestamp;
 	legacy_thread_url?: string;
-	nominations_summary: BeatmapsetCompactNominationsSummary;
+	nominations_summary: OBeatmapsetCompactNominationsSummary;
 	ranked?: RankedStatus;
-	ranked_date?: Date;
+	ranked_date?: Timestamp;
 	source?: string;
 	storyboard: boolean;
-	submitted_date?: Date;
+	submitted_date?: Timestamp;
 	tags: string;
 	has_favourited: boolean;
 }
 
-export interface BeatmapsetCompact extends BeatmapsetCompactBase {
+export interface OBeatmapsetCompact extends OBeatmapsetCompactBase {
 	source: string;
 	has_favourited?: boolean;
 }
 
-export interface BeatmapsetCompactBase {
+export interface OBeatmapsetCompactBase {
 	artist: string;
 	artist_unicode: string;
-	covers: Covers;
+	covers: OCovers;
 	creator: string;
 	favourite_count: number;
 	id: number;
@@ -80,11 +81,11 @@ export interface BeatmapsetCompactBase {
 	title_unicode: string;
 	user_id: number;
 	video: boolean;
-	beatmaps?: Beatmap[];
+	beatmaps?: OBeatmap[];
 	converts?: unknown;
 	current_user_attributes?: unknown;
 	description?: unknown;
-	discussions?: BeatmapsetDiscussion;
+	discussions?: OBeatmapsetDiscussion;
 	events?: unknown;
 	genre?: string;
 	language?: string;
@@ -95,53 +96,53 @@ export interface BeatmapsetCompactBase {
 	user?: OUser;
 }
 
-export interface BeatmapsetCompactAvailability {
+export interface OBeatmapsetCompactAvailability {
 	download_disabled: boolean;
 	more_information?: string;
 }
 
-export interface BeatmapsetCompactHype {
+export interface OBeatmapsetCompactHype {
 	current?: number;
 	required?: number;
 }
 
-export interface BeatmapsetCompactNominationsSummary {
+export interface OBeatmapsetCompactNominationsSummary {
 	current?: number;
 	required?: number;
 }
 
-export interface BeatmapsetDiscussion {
-	beatmaps: Beatmap[];
+export interface OBeatmapsetDiscussion {
+	beatmaps: OBeatmap[];
 	cursor_string: string;
-	discussions: BeatmapsetDiscussionCompact[];
-	included_discussions: BeatmapsetDiscussionCompact[];
+	discussions: OBeatmapsetDiscussionCompact[];
+	included_discussions: OBeatmapsetDiscussionCompact[];
 	users: OUserCompact[];
 }
 
-export interface BeatmapsetDiscussionCompact {
-	beatmap?: BeatmapCompact;
+export interface OBeatmapsetDiscussionCompact {
+	beatmap?: OBeatmapCompact;
 	beatmap_id: number;
-	beatmapset: BeatmapsetCompact;
+	beatmapset: OBeatmapsetCompact;
 	beatmapset_id: number;
 	can_grant_kudosu: boolean;
-	created_at: Date;
+	created_at: Timestamp;
 	current_user_attributes: unknown;
-	deleted_at: Date;
+	deleted_at: Timestamp;
 	deleted_by_id: number;
 	id: number;
 	kudosu_denied: boolean;
-	last_post_at: Date;
+	last_post_at: Timestamp;
 	message_type: string;
 	parent_id: number;
-	posts: BeatmapsetDiscussionPost[];
+	posts: OBeatmapsetDiscussionPost[];
 	resolved: boolean;
-	starting_post: BeatmapsetDiscussionPost;
+	starting_post: OBeatmapsetDiscussionPost;
 	timestamp: number;
-	updated_at: Date;
+	updated_at: Timestamp;
 	user_id: number;
 }
 
-export interface Covers {
+export interface OCovers {
 	cover: string;
 	"cover@2x": string;
 	card: string;
@@ -152,21 +153,21 @@ export interface Covers {
 	"slimcover@2x": string;
 }
 
-export interface BeatmapsetDiscussionPost {
-	beatmapsets: BeatmapsetCompact[];
-	discussions: [BeatmapsetDiscussionCompact];
-	posts: [BeatmapsetDiscussionPostCompact];
+export interface OBeatmapsetDiscussionPost {
+	beatmapsets: OBeatmapsetCompact[];
+	discussions: [OBeatmapsetDiscussionCompact];
+	posts: [OBeatmapsetDiscussionPostCompact];
 }
 
-export interface BeatmapsetDiscussionPostCompact {
+export interface OBeatmapsetDiscussionPostCompact {
 	beatmapset_discussion_id: number;
-	created_at: Date;
-	deleted_at: Date;
+	created_at: Timestamp;
+	deleted_at: Timestamp;
 	deleted_by_id: number;
 	id: number;
 	last_editor_id: number;
 	message: string;
 	system: boolean;
-	updated_at: Date;
+	updated_at: Timestamp;
 	user_id: number;
 }

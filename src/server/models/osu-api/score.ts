@@ -1,6 +1,7 @@
 import { OGamemodeName } from "./gamemode";
-import { Beatmap, Beatmapset } from "./beatmap";
+import { OBeatmap, OBeatmapset } from "./beatmap";
 import { OUser } from "./user";
+import { Timestamp } from "./timestamp";
 
 export interface OScore {
 	id: number;
@@ -16,13 +17,17 @@ export interface OScore {
 	passed: boolean;
 	pp: number;
 	rank: string;
-	created_at: Date;
+	created_at: Timestamp;
 	mode: OGamemodeName;
 	mode_int: number;
 	replay: boolean;
-	beatmap: Beatmap;
-	beatmapset: Beatmapset;
+	beatmap: OBeatmap;
+	beatmapset: OBeatmapset;
 	user?: OUser;
+}
+
+export interface OScores {
+	scores: OScore[];
 }
 
 export interface OScoreStatistics {

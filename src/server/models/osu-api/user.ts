@@ -1,10 +1,11 @@
 import { OGamemodeName } from "./gamemode";
+import { Timestamp } from "./timestamp";
 
 export interface OUser extends OUserCompactBase {
 	discord?: string;
 	has_supported: boolean;
 	interests?: string;
-	join_date: Date;
+	join_date: Timestamp;
 	kudosu: OUserCompactKudosu;
 	location?: string;
 	max_blocks?: number;
@@ -39,7 +40,7 @@ export interface OUserCompactBase {
 	is_deleted: boolean;
 	is_online: boolean;
 	is_supporter: boolean;
-	last_visit?: Date;
+	last_visit?: Timestamp;
 	pm_friends_only: boolean;
 	profile_colour: string;
 	username: string;
@@ -153,7 +154,7 @@ export interface OUserStatisticsRulesets {
 }
 
 export interface OUserAchievement {
-	achieved_at: Date;
+	achieved_at: Timestamp;
 	achievement_id: number;
 }
 
