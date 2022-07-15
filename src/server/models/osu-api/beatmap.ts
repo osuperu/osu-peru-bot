@@ -40,6 +40,10 @@ export interface OBeatmapCompact {
 	max_combo?: number;
 }
 
+export interface OBeatmapsCompact {
+	beatmaps: OBeatmapCompact[];
+}
+
 export interface OBeatmapset extends OBeatmapsetCompactBase {
 	availability: OBeatmapsetCompactAvailability;
 	bpm: number;
