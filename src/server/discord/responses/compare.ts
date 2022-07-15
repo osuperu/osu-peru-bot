@@ -51,6 +51,9 @@ export class CompareResponse implements CommandResponse {
 					},
 					url: `https://osu.ppy.sh/b/${beatmap.id}`,
 					description: description,
+					thumbnail: {
+						url: `https://b.ppy.sh/thumb/${beatmap.beatmapset.id}l.jpg`,
+					},
 				},
 			],
 		};
