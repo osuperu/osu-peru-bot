@@ -11,6 +11,8 @@ import { Config } from "./util/config";
 import { Cron } from "./util/cron";
 import { Logger } from "./util/logger";
 
+import moment from "moment";
+import 'moment/locale/es'
 export class App {
 	public static instance = new App();
 
@@ -31,6 +33,8 @@ export class App {
 	}
 
 	async start(): Promise<void> {
+		moment.locale("es");
+		
 		this.app.use(
 			express.static(path.join(__dirname, "static"), {
 				dotfiles: "allow",
