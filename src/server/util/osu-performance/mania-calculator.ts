@@ -2,6 +2,7 @@ import { BeatmapDecoder } from "osu-parsers";
 import { ManiaRuleset } from "osu-mania-stable";
 import { Calculator, ComputatedPerformance } from "../../models/calculator";
 import { OScore } from "../../models/osu-api/score";
+import { Misc } from "../misc";
 
 export class ManiaCalculator implements Calculator {
 	calculate(osuFile: string, score: OScore): ComputatedPerformance {
@@ -75,11 +76,7 @@ export class ManiaCalculator implements Calculator {
 			),
 			starRating: difficulty.starRating,
 			maxCombo: difficulty.maxCombo,
-			hitsInfo: this.getHitsFor(score),
+			hitsInfo: Misc.getHitsFor("mania", score),
 		};
-	}
-
-	getHitsFor(score: OScore): string {
-		return `${score.statistics.count_300}/${score.statistics.count_geki}/${score.statistics.count_100}/${score.statistics.count_katu}/${score.statistics.count_50}/${score.statistics.count_miss}`;
 	}
 }
