@@ -15,10 +15,9 @@ export class RecentResponse implements CommandResponse {
 		const beatmapFile = await axios(
 			`https://osu.ppy.sh/osu/${score.beatmap.id}`
 		);
-		const computedPerformance = new PerformanceFactory().getCalculator(gamemode).calculate(
-			beatmapFile.data,
-			score
-		);
+		const computedPerformance = new PerformanceFactory()
+			.getCalculator(gamemode)
+			.calculate(beatmapFile.data, score);
 		const mods = score.mods.length > 0 ? ` +${score.mods.join("")}` : "";
 
 		return {
@@ -41,7 +40,9 @@ export class RecentResponse implements CommandResponse {
 						Math.round(computedPerformance.recentPP)
 					}pp › ${(score.accuracy * 100).toFixed(2)}% › <${
 						score.max_combo
-					}x/${computedPerformance.maxCombo}x> › \`[${computedPerformance.hitsInfo}]\``,
+					}x/${computedPerformance.maxCombo}x> › \`[${
+						computedPerformance.hitsInfo
+					}]\``,
 					thumbnail: {
 						url: `https://b.ppy.sh/thumb/${score.beatmapset.id}l.jpg`,
 					},
