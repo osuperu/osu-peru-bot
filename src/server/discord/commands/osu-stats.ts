@@ -3,6 +3,7 @@ import { User } from "../../models/user";
 import { OUser } from "../../models/osu-api/user";
 import { OsuStatsResponse } from "../responses/osu-stats-response";
 import { OsuApi } from "../../util/api/osu-api";
+import { OGamemodeName } from "../../models/osu-api/gamemode";
 
 export default <SlashCommand>{
 	commandEnum: "OSUSTATS",
@@ -52,30 +53,31 @@ export default <SlashCommand>{
 	async call({ interaction }): Promise<SlashCommandReturn> {
 		try {
             const guildMember = interaction.options.getUser("discord", false) || interaction.member.user;
-            const userDb = await User.findOne({ "discord.userId": guildMember.id });
-            const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
-            const gamemode = (interaction.options.getString("gamemode", false) || (userDb ? userDb.osu.playmode : "osu")) as | "osu" | "mania" | "fruits" | "taiko";
-    
-            const ret = (await OsuApi.fetchUserPublic(
-                user,
-                gamemode
-            )) as OUser;
-    
-            if (!userDb) {
-                return {
+            const userDb = await User.findOne({ "discord.userID": guildMember.id });
+
+			if (!userDb) {
+				return {
                     message: {
                         content: "El usuario no tiene ninguna cuenta de osu! vinculada."
                     }
                 }
-            }
+			}
+
+            const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
+            const gamemode = (interaction.options.getString("gamemode", false) || (userDb ? userDb.osu.playmode : "osu")) as OGamemodeName;
+			
+			const ret = (await OsuApi.fetchUserPublic(
+                user,
+                gamemode
+            )) as OUser;
     
             return {
                 message: (new OsuStatsResponse).getMessage(ret, gamemode)
             }
         } catch (e) {
-            return {
+			return {
                 message: {
-                    content: "El usuario no existe."
+                    content: "El usuario no existe.",
                 }
             }
         }

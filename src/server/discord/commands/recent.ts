@@ -2,6 +2,7 @@ import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
 import { User } from "../../models/user";
 import { OUser } from "../../models/osu-api/user";
 import { OScore } from "../../models/osu-api/score"
+import { OGamemodeName } from "../../models/osu-api/gamemode"
 import { OsuApi } from "../../util/api/osu-api";
 import { RecentResponse } from "../responses/recent";
 
@@ -76,13 +77,22 @@ export default <SlashCommand>{
     async call({ interaction }): Promise<SlashCommandReturn> {
         try {
             const guildMember = interaction.options.getUser("discord", false) || interaction.member.user;
-            const userDb = await User.findOne({ "discord.userId": guildMember.id });
+            const userDb = await User.findOne({ "discord.userID": guildMember.id });
+
+			if (!userDb) {
+                return {
+                    message: {
+                        content: "El usuario no tiene ninguna cuenta de osu! vinculada."
+                    }
+                }
+            }
+
             const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
-            const gamemode = (interaction.options.getString("gamemode", false) || "osu") as "osu" | "mania" | "fruits" | "taiko";
+            const gamemode = (interaction.options.getString("gamemode", false) || "osu") as OGamemodeName;
             const offset = interaction.options.getInteger("offset", false) || 0;
             const includeFails = (interaction.options.getString("fails", false) || "1") as "0" | "1";
 
-            const osuUser = (await OsuApi.fetchUserPublic(
+			const osuUser = (await OsuApi.fetchUserPublic(
                 user,
                 gamemode
             )) as OUser;
@@ -95,20 +105,12 @@ export default <SlashCommand>{
                 includeFails
             ))[0] as OScore;
 
-            if (!userDb) {
-                return {
-                    message: {
-                        content: "El usuario no tiene ninguna cuenta de osu! vinculada."
-                    }
-                }
-            }
-
             return {
                 message: await (new RecentResponse).getMessage(osuUser, ret, gamemode)
             }
 
         } catch (e) {
-            return {
+			return {
                 message: {
                     content: "El usuario no tiene plays recientes en ese modo de juego."
                 }
