@@ -22,6 +22,13 @@ export class Config {
 		},
 	};
 
+	public qat = {
+		api: {
+			username: "" as string,
+			secret: "" as string,
+		},
+	};
+
 	public discord = {
 		oauth: {
 			clientID: "" as string,

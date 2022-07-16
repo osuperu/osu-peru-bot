@@ -14,6 +14,12 @@
             "clientSecret": "PUT_YOUR_SECRET_HERE"
         }
     },
+    "qat": {
+        "api": {
+            "username": "",
+            "secret": ""
+        }
+    },
     "discord": {
         "oauth": {
             "clientID": "PUT_YOUR_CLIENT_ID_HERE",
