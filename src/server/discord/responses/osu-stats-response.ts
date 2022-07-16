@@ -5,7 +5,7 @@ import { Misc } from "../../util/misc";
 import { OGamemodeName } from "../../models/osu-api/gamemode";
 
 export class OsuStatsResponse implements CommandResponse {
-	getMessage(user: OUser, gamemode: OGamemodeName): MessageOptions {
+	async getMessage(user: OUser, gamemode: OGamemodeName): Promise<MessageOptions> {
 		return {
 			embeds: [
 				{

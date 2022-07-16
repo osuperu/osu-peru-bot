@@ -72,7 +72,7 @@ export default <SlashCommand>{
             )) as OUser;
     
             return {
-                message: (new OsuStatsResponse).getMessage(ret, gamemode)
+                message: await (new OsuStatsResponse).getMessage(ret, gamemode)
             }
         } catch (e) {
 			return {
