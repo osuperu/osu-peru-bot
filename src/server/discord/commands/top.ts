@@ -94,7 +94,7 @@ export default <SlashCommand>{
             ) as OScore[];
 
             return {
-                message: await (new TopResponse).getMessage(osuUser, ret, gamemode)
+                message: await (new TopResponse).getMessage(osuUser, ret, gamemode, offset)
             }
 		} catch (e) {
 			return {

@@ -11,7 +11,8 @@ export class TopResponse implements CommandResponse {
 	async getMessage(
 		user: OUser,
 		scores: OScore[],
-		gamemode: OGamemodeName
+		gamemode: OGamemodeName,
+		offset: number
 	): Promise<MessageOptions> {
 		let description = "";
 		let count = 1;
@@ -24,7 +25,7 @@ export class TopResponse implements CommandResponse {
 			const beatmap = beatmaps.beatmaps.find(element => element.id === score.beatmap.id);
 
 			description +=
-				`**${count}.** [${score.beatmapset.title} - [${score.beatmap.version}]](${score.beatmap.url}) **+${mods}**` +
+				`**${count * (offset + 1)}.** [${score.beatmapset.title} - [${score.beatmap.version}]](${score.beatmap.url}) **+${mods}**` +
 				"\n";
 			description +=
 				`${score.rank} • ${
