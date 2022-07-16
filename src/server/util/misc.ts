@@ -12,6 +12,19 @@ export class Misc {
 		return val != null && val !== "" && !isNaN(Number(val.toString()));
 	}
 
+	static convertDaysToYearDays(days: number): string {
+		const years = Math.floor(days / 365);
+		const remainingDays = Math.round(days % 365);
+
+		if (years > 0) {
+			return `${years} ${
+				years == 1 ? "año" : "años"
+			}, ${remainingDays} dias`;
+		} else {
+			return `${remainingDays} dias`;
+		}
+	}
+
 	static timeFromNow(date: Timestamp): string {
 		return moment(date).fromNow(); // Por mejorar para que la fecha de manera mas exacta
 	}
