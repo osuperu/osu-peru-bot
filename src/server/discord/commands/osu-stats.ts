@@ -1,7 +1,7 @@
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
 import { User } from "../../models/user";
 import { OUser } from "../../models/osu-api/user";
-import { OsuStatsResponse } from "../responses/osu-stats-response";
+import { OsuStatsResponse } from "../responses/osu-stats";
 import { OsuApi } from "../../util/api/osu-api";
 import { OGamemodeName } from "../../models/osu-api/gamemode";
 
