@@ -5,4 +5,4 @@ export enum OGamemode {
 	taiko = 3,
 }
 
-export type OGamemodeName = "osu" | "taiko" | "mania" | "fruits";
+export type OGamemodeName = "osu" | "taiko" | ("fruits" | "catch") | "mania";
