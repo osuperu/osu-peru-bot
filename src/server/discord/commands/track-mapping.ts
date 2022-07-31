@@ -14,15 +14,12 @@ export default <SlashCommand>{
 			description:
 				"Nombre de usuario o ID del jugador cuyas estadísticas quieres ver",
 			type: "STRING",
-			required: false,
+			required: true,
 		}
     ],
     async call({ interaction }): Promise<SlashCommandReturn> {
         try {
-            const guildMember = interaction.options.getUser("discord", false) || interaction.member.user;
-            const userDb = await User.findOne({ "discord.userID": guildMember.id });
-
-            const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
+            const userDb = await User.findOne({ "discord.userID": interaction.member.user.id });
             
             if (!userDb) {
 				return {
@@ -31,6 +28,8 @@ export default <SlashCommand>{
                     }
                 }
 			}
+
+            const user = interaction.options.getString("user", true);
 
             const ret = (await OsuApi.fetchUserPublic(
                 user,
