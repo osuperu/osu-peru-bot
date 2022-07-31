@@ -3,16 +3,15 @@ import { DateTime } from "luxon";
 
 import { App } from "../app";
 
-import { OsuApi } from "../util/osu-api";
+import { OsuApi } from "../util/api/osu-api";
 import { DiscordAPIError, RoleResolvable, Snowflake } from "discord.js";
 
-import { OsuInformationSchema } from "./schemas/osu-info-schema";
-import {
-	CodeExchangeSchema,
-	OAuthUserSchema,
-} from "./schemas/osu-api-info-schema";
-import { DiscordInformationSchema } from "./schemas/discord-info-schema";
-import { UserSchema } from "./schemas/user-schema";
+import { OsuInformationSchema } from "./mongo-schemas/osu-info-schema";
+import { OCodeExchange } from "./osu-api/oauth-access";
+import { OUser } from "./osu-api/user"
+import { DiscordInformationSchema } from "./mongo-schemas/discord-info-schema";
+import { UserSchema } from "./mongo-schemas/user-schema";
+import { TrackingSchema } from "./mongo-schemas/tracking-schema";
 
 import { Logger } from "../util/logger";
 const logger = Logger.get("UserModel");
@@ -70,6 +69,11 @@ export interface User extends Mongoose.Document {
 	getUsername(): string;
 }
 
+export interface UserMappingTrack extends Mongoose.Document {
+	userID: number;
+	lastUpdated: Date;
+}
+
 export interface UserModel extends Mongoose.Model<User> {
 	serializeUser: (
 		user: User,
@@ -90,7 +94,7 @@ OsuInformationSchema.methods.fetchUser = async function (
 		try {
 			const tokenRet = (await OsuApi.refreshAccessToken(
 				this.refreshToken
-			)) as CodeExchangeSchema;
+			)) as OCodeExchange;
 			this.accessToken = tokenRet.access_token;
 			this.refreshToken = tokenRet.refresh_token;
 			this.lastVerified = DateTime.now().toJSDate();
@@ -118,7 +122,7 @@ OsuInformationSchema.methods.fetchUser = async function (
 		undefined,
 		this.accessToken,
 		undefined
-	)) as OAuthUserSchema;
+	)) as OUser;
 
 	this.isRestricted = ret.is_restricted;
 	this.username = ret.username;
@@ -366,3 +370,8 @@ export const User: UserModel = Mongoose.model<User>(
 	"User",
 	UserSchema
 ) as UserModel;
+
+export const UserMappingTrack = Mongoose.model(
+	"UserMappingTrack",
+	TrackingSchema
+);

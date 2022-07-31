@@ -87,7 +87,7 @@ export class DiscordOAuthRouter {
 				if (
 					req.user?.discord &&
 					!req.user.discord.availableDelinkDate()
-				) { // Ponerlo en !req.user.discord.availableDelinkDate() (Quite el ! solo por probar)
+				) {
 					await req.user.discord.delink();
 					req.user.discord = undefined;
 					await req.user.save();
