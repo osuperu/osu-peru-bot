@@ -55,9 +55,46 @@ export class Config {
 			isRestricted: "" as string,
 			foreigner: "" as string,
 		},
+		tracking: {
+			mapping: "" as string,
+		},
 		eventHandlers: {
 			channels: {
 				mappingTimestamp: [""] as string[],
+			},
+		},
+		emojis: {
+			gamemodes: {
+				osu: "" as string,
+				mania: "" as string,
+				taiko: "" as string,
+				fruits: "" as string,
+			},
+			difficulties: {
+				easy: {
+					name: "" as string,
+					id: "" as string,
+				},
+				normal: {
+					name: "" as string,
+					id: "" as string,
+				},
+				hard: {
+					name: "" as string,
+					id: "" as string,
+				},
+				insane: {
+					name: "" as string,
+					id: "" as string,
+				},
+				expert: {
+					name: "" as string,
+					id: "" as string,
+				},
+				expertPlus: {
+					name: "" as string,
+					id: "" as string,
+				},
 			},
 		},
 	};

@@ -46,11 +46,48 @@
             "isRestricted": "PUT_YOUR_ROLE_ID_HERE",
             "foreigner": "PUT_YOUR_ROLE_ID_HERE"
         },
+        "tracking": {
+            "mapping": "PUT_YOUR_CHANNEL_ID_HERE"
+        },
         "eventHandlers": {
             "channels": {
                 "mappingTimestamp": [
                     "PUT_YOUR_WHITELISTED_CHANNELS_ID_HERE"
                 ]
+            }
+        },
+        "emojis": {
+            "gamemodes": {
+                "osu": "PUT_YOUR_EMOJI_ID_HERE",
+                "mania": "PUT_YOUR_EMOJI_ID_HERE",
+                "taiko": "PUT_YOUR_EMOJI_ID_HERE",
+                "fruits": "PUT_YOUR_EMOJI_ID_HERE"
+            },
+            "difficulties": {
+                "easy": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                },
+                "normal": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                },
+                "hard": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                },
+                "insane": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                },
+                "expert": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                },
+                "expertPlus": {
+                    "name": "PUT_YOUR_EMOJI_NAME_HERE",
+                    "id": "PUT_YOUR_EMOJI_ID_HERE"
+                }
             }
         }
     },

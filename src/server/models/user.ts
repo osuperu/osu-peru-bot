@@ -11,6 +11,7 @@ import { OCodeExchange } from "./osu-api/oauth-access";
 import { OUser } from "./osu-api/user"
 import { DiscordInformationSchema } from "./mongo-schemas/discord-info-schema";
 import { UserSchema } from "./mongo-schemas/user-schema";
+import { TrackingSchema } from "./mongo-schemas/tracking-schema";
 
 import { Logger } from "../util/logger";
 const logger = Logger.get("UserModel");
@@ -66,6 +67,11 @@ export interface User extends Mongoose.Document {
 	getInfos(): UserInformation;
 	updateUser(): Promise<void>;
 	getUsername(): string;
+}
+
+export interface UserMappingTrack extends Mongoose.Document {
+	userID: number;
+	lastUpdated: Date;
 }
 
 export interface UserModel extends Mongoose.Model<User> {
@@ -364,3 +370,8 @@ export const User: UserModel = Mongoose.model<User>(
 	"User",
 	UserSchema
 ) as UserModel;
+
+export const UserMappingTrack = Mongoose.model(
+	"UserMappingTrack",
+	TrackingSchema
+);

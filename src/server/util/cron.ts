@@ -6,7 +6,7 @@ import RefreshAllUserData from "../scripts/refresh-all-users";
 import BackupDatabase from "../scripts/backup-database";
 
 import { Script } from "../models/script";
-
+import MappingTracking from "../scripts/mapping-tracking";
 export class Cron {
 	tasks: Array<CronJob> = [];
 	logger = Logger.get("cron");
@@ -42,6 +42,20 @@ export class Cron {
 				} catch (err) {
 					this.logger.error(
 						"An error occured while executing database backup task!",
+						{ err }
+					);
+				}
+			})
+		);
+
+		this.tasks.push(
+			new CronJob("* * * * *", async () => {
+				// Every minute
+				try {
+					await new MappingTracking().run();
+				} catch (err) {
+					this.logger.error(
+						"An error occured while executing osu tracking task!",
 						{ err }
 					);
 				}

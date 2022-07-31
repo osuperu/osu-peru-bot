@@ -152,4 +152,24 @@ export class OsuApi {
 			accessToken: App.instance.clientCredential.token,
 		});
 	}
+
+	static async fetchBeatmapset(beatmapsetID: number): Promise<unknown> {
+		await this.refreshClientCredential();
+		return this.request({
+			endpoint: `/beatmapsets/${beatmapsetID}`,
+			accessToken: App.instance.clientCredential.token,
+		});
+	}
+
+	static async fetchRecentActivity(
+		userid: number,
+		limit: number,
+		offset: number
+	): Promise<unknown> {
+		await this.refreshClientCredential();
+		return this.request({
+			endpoint: `/users/${userid}/recent_activity?limit=${limit}&offset=${offset}`,
+			accessToken: App.instance.clientCredential.token,
+		});
+	}
 }
