@@ -1,8 +1,8 @@
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
-import { User } from "../../models/user";
+import { User, UserMappingTrack } from "../../models/user";
 import { UntrackMappingResponse } from "../responses/untrack-mapping";
-import { OsuApi } from '../../util/api/osu-api';
-import { OUser } from '../../models/osu-api/user';
+import { OsuApi } from "../../util/api/osu-api";
+import { OUser } from "../../models/osu-api/user";
 
 export default <SlashCommand>{
 	commandEnum: "UNTRACKMAPPING",
@@ -19,26 +19,37 @@ export default <SlashCommand>{
 	],
 	async call({ interaction }): Promise<SlashCommandReturn> {
 		try {
-			const userDb = await User.findOne({ "discord.userID": interaction.member.user.id });
-            
-            if (!userDb) {
+			const userDb = await User.findOne({
+				"discord.userID": interaction.member.user.id,
+			});
+
+			if (!userDb) {
 				return {
-                    message: {
-                        content: "El usuario no tiene ninguna cuenta de osu! vinculada."
-                    }
-                }
+					message: {
+						content:
+							"El usuario no tiene ninguna cuenta de osu! vinculada.",
+					},
+				};
 			}
 
-            const user = interaction.options.getString("user", true);
+			const user = interaction.options.getString("user", true);
+			const ret = (await OsuApi.fetchUserPublic(user, "osu")) as OUser;
+			const trackedUserDb = await UserMappingTrack.findOne({
+				userID: ret.id,
+			});
 
-            const ret = (await OsuApi.fetchUserPublic(
-                user,
-                "osu"
-            )) as OUser;
+			if (!trackedUserDb) {
+				return {
+					message: {
+						content: `El jugador ${ret.username} no se encuentra trackeado.`,
+					},
+				};
+			}
 
-            return {
-                message: await (new UntrackMappingResponse).getMessage(ret)
-            }
+			trackedUserDb.delete();
+			return {
+				message: await new UntrackMappingResponse().getMessage(ret),
+			};
 		} catch (e) {
 			return {
 				message: {
