@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { createI18n, LocaleMessages, VueMessageType } from "vue-i18n";
+import { createI18n } from "vue-i18n";
 
 import App from "./vue/App.vue";
 import Home from "./vue/layouts/home-item.vue";
@@ -13,9 +13,10 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
+// TODO: I can't call the config from server/App so I'll leave it like this for now
 const i18n = createI18n({
-	locale: "es", // Call env var
-	fallbackLocale: "en", // Call env var
+	locale: "es",
+	fallbackLocale: "en",
 	messages: {
 		es: { ...esMessages },
 		en: { ...enMessages },

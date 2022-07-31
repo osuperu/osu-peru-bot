@@ -105,7 +105,7 @@ export default defineComponent({
             if (!this.user.discordLinked) {
                 window.location.href = "/api/auth/discord";
             } else {
-                if (!this.user.availableDelinkDate) { // Poner esto en !this.user......etc (Temporal, solo para probar)
+                if (!this.user.availableDelinkDate) {
                     await axios.get("/api/auth/discord/delink");
                     this.reloadData();
                 }
