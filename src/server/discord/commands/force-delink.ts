@@ -47,10 +47,12 @@ export default <SlashCommand>{
 			if (guildMember) {
 				user = await User.findOne({ "discord.userID": guildMember.id });
 			} else {
-                user = null;
-            }
+				user = null;
+			}
 		} else if (type == "osu") {
-			user = await User.byOsuResolvable(interaction.options.getString("user"));
+			user = await User.byOsuResolvable(
+				interaction.options.getString("user")
+			);
 		} else {
 			user = null;
 		}
