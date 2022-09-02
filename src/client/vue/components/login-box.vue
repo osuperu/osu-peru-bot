@@ -1,6 +1,7 @@
 <template>
-    <div class="btn-group float-end">
-        <a class="dropdown-toggle text-decoration-none text-light" data-bs-toggle="dropdown">
+    <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-decoration-none text-light" data-bs-toggle="dropdown"
+            id="navbarDropdownMenuLink" aria-haspopup="true" role="button" aria-expanded="false">
             <img class="player-avatar" :src="`https://a.ppy.sh/${user.osuID}`">
             <span>
                 <template v-if="!user.osuLinked">
@@ -11,35 +12,31 @@
                 </template>
             </span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-                <a class="dropdown-item" @click="osuAction()">
-                    <i class="bi-osu"></i>
-                    <template v-if="!user.osuLinked">
-                        {{ $t("header.login-box.osu") }}
-                    </template>
-                    <template v-else>
-                        {{ $t("header.login-box.delink") }}
-                    </template>
-                </a>
-            </li>
-            <li>
-                <a :hidden="(!user.osuLinked && !user.discordLinked) || (user.discordLinked && user.remainingDelinkTime != undefined)"
-                    class="dropdown-item" @click="discordAction()">
-                    <i class="bi bi-discord"></i>
-                    <template v-if="!user.discordLinked">
-                        {{ $t("header.login-box.discord") }}
-                    </template>
-                    <template v-else>
-                        {{ $t("header.login-box.delink") }}
-                    </template>
-                </a>
-                <a class="alt dropdown-item" v-if="user.deadlineDate">
-                    <i class="bi bi-discord"></i>
-                    &nbsp;<timer-item :deadline="user.deadlineDate"></timer-item>
-                </a>
-            </li>
-        </ul>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" @click="osuAction()">
+                <i class="bi-osu"></i>
+                <template v-if="!user.osuLinked">
+                    {{ $t("header.login-box.osu") }}
+                </template>
+                <template v-else>
+                    {{ $t("header.login-box.delink") }}
+                </template>
+            </a>
+            <a :hidden="(!user.osuLinked && !user.discordLinked) || (user.discordLinked && user.remainingDelinkTime != undefined)"
+                class="dropdown-item" @click="discordAction()">
+                <i class="bi bi-discord"></i>
+                <template v-if="!user.discordLinked">
+                    {{ $t("header.login-box.discord") }}
+                </template>
+                <template v-else>
+                    {{ $t("header.login-box.delink") }}
+                </template>
+            </a>
+            <a class="alt dropdown-item" v-if="user.deadlineDate">
+                <i class="bi bi-discord"></i>
+                &nbsp;<timer-item :deadline="user.deadlineDate"></timer-item>
+            </a>
+        </div>
     </div>
 </template>
 
@@ -117,23 +114,3 @@ export default defineComponent({
     }
 });
 </script>
-
-<style>
-.player-avatar {
-    width: 3rem;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 1.3rem;
-}
-
-.bi-osu {
-    background-image: url("../assets/osu.svg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-    filter: brightness(0) saturate(100%);
-}
-</style>
