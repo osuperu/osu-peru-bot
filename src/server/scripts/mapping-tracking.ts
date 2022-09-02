@@ -30,7 +30,7 @@ export default class MappingTracking implements Script {
 					let _lastUpdated: Date;
 
 					for (const event of events) {
-						if (event.type === "beatmapsetUpdate") {
+						if (event.type === "beatmapsetUpload") {
 							const _createdAt = new Date(event.created_at);
 
 							if (_createdAt > user.lastUpdated) {
