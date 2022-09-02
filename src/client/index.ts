@@ -4,6 +4,7 @@ import { createI18n } from "vue-i18n";
 
 import App from "./vue/App.vue";
 import Home from "./vue/layouts/home-item.vue";
+import Events from "./vue/layouts/events-item.vue";
 import Error from "./vue/layouts/error-item.vue";
 
 import * as esMessages from "./vue/i18n/es.json";
@@ -27,6 +28,7 @@ const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{ path: "/", component: Home },
+		{ path: "/events", component: Events },
 		{ path: "/:pathMatch(.*)*", component: Error },
 	],
 });

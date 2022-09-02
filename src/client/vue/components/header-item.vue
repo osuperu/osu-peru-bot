@@ -1,44 +1,47 @@
 <template>
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
-        <div class="container-md">
-            <a class="navbar-brand" href="/">osu!Peru</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg navbar-dark nav-bg-custom shadow-lg">
+        <div class="container">
+            <img src="../assets/osu-peru-2.svg" class="logos" alt="logo banner">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse flex-row-reverse" id="navbarResponsive">
+                <ul class="navbar-nav align-items-lg-center">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">{{ $t("header.nav.home") }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/events">{{ $t("header.nav.events") }}</a>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a class="nav-link" href="/about">{{ $t("header.nav.about") }}</a>
                     </li>
+                    <li class="nav-item">
+                        <locale-change-item></locale-change-item>
+                    </li>
+                    -->
+                    <login-box></login-box>
                 </ul>
-                <locale-change-item></locale-change-item>
-                <login-box></login-box>
             </div>
         </div>
     </nav>
+
+
+
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import localeChangeItem from './locale-change-item.vue';
+/*import localeChangeItem from './locale-change-item.vue';*/
 import loginBox from './login-box.vue';
 
 export default defineComponent({
     name: "header-item",
     components: {
-        localeChangeItem,
+        /*localeChangeItem,*/
         loginBox
     }
 })
 </script>
-
-<style>
-</style>
