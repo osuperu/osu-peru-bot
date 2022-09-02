@@ -15,6 +15,13 @@
 			"problemMatcher": [],
 			"label": "npm: start",
 			"detail": "node build/server/index.js"
+		},
+		{
+			"type": "npm",
+			"script": "dev:client",
+			"problemMatcher": [],
+			"label": "npm: dev:client",
+			"detail": "vite"
 		}
 	]
 }
