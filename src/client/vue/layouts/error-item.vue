@@ -16,7 +16,7 @@
     <section class="bg-dark py-5">
         <div class="container">
             <div class="row row align-items-center">
-                <img src="../assets/dino.png" class="img-fluid" alt="Dino">
+                <img src="../assets/dino.svg" class="img-fluid" alt="Dino">
             </div>
         </div>
     </section>
