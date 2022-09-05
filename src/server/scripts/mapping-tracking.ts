@@ -45,6 +45,25 @@ export default class MappingTracking implements Script {
 											beatmapsetID
 										)) as OBeatmapset;
 
+									beatmapset.beatmaps.sort(Misc.sortBeatmaps);
+
+									let description = "";
+									for (const beatmap of beatmapset.beatmaps) {
+										if (beatmap.difficulty_rating < 0.01) {
+											_lastUpdated = new Date(_createdAt.getTime() - 1000);
+											break;
+										}
+										
+										description +=
+											`${Misc.getStarRatingEmoji(
+												beatmap.difficulty_rating
+											)} ${
+												beatmap.version
+											} - ${beatmap.difficulty_rating.toFixed(
+												2
+											)}★ [${beatmap.mode}]` + "\n";
+									}
+
 									const embed = new MessageEmbed()
 										.setAuthor({
 											name: `Nuevo mapa subido por ${event.user.username}`,
@@ -55,20 +74,6 @@ export default class MappingTracking implements Script {
 										.setThumbnail(
 											beatmapset.user.avatar_url
 										);
-
-									beatmapset.beatmaps.sort(Misc.sortBeatmaps);
-									let description = "";
-
-									for (const beatmap of beatmapset.beatmaps) {
-										description +=
-											`${Misc.getStarRatingEmoji(
-												beatmap.difficulty_rating
-											)} ${
-												beatmap.version
-											} - ${beatmap.difficulty_rating.toFixed(
-												2
-											)}★ [${beatmap.mode}]` + "\n";
-									}
 
 									embed.setDescription(description);
 									embed
@@ -83,8 +88,9 @@ export default class MappingTracking implements Script {
 									channel.send({
 										embeds: [embed],
 									});
+
+									_lastUpdated = _createdAt;
 								}
-								_lastUpdated = _createdAt;
 							}
 						}
 					}
