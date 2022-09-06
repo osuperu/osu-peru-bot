@@ -6,11 +6,14 @@ import * as fs from "fs";
 import * as path from "path";
 import { App } from "../app";
 
+import { Logger } from "../util/logger";
+const logger = Logger.get("SlashCommand");
+
 export class CommandsManager extends BaseManager {
 	private commands: SlashCommand[] = [];
 	private initializedCommands: ApplicationCommand[] = [];
 
-	// Se leen todos los comandos slash dentro de la carpeta commands
+	// All slash commands inside the 'commands' folder are read
 	constructor() {
 		super();
 
@@ -65,26 +68,37 @@ export class CommandsManager extends BaseManager {
 	}
 
 	async handleInteractions(interaction: CommandInteraction): Promise<void> {
-        await interaction.deferReply();
+		try {
+			await interaction.deferReply();
 
-        const command = this.commands.find(command => command.name === interaction.commandName);
+			const command = this.commands.find(
+				(command) => command.name === interaction.commandName
+			);
 
-        const commandReturn = await command.call({ interaction });
+			const commandReturn = await command.call({ interaction, logger });
 
-        interaction.editReply(commandReturn.message);
+			interaction.editReply(commandReturn.message);
 
-        if(commandReturn.edit_promise) {
-            Promise.resolve(commandReturn.edit_promise).then(edit => {
-                interaction.editReply(edit.message);
-            })
-        }
-    }
+			if (commandReturn.edit_promise) {
+				Promise.resolve(commandReturn.edit_promise).then((edit) => {
+					interaction.editReply(edit.message);
+				});
+			}
+		} catch (error) {
+			logger.error(
+				"Ocurrio un error al intentar interactuar con un slash command",
+				{ error }
+			);
+		}
+	}
 
 	getAppCommand(commandEnum: string): ApplicationCommand {
-        return this.initializedCommands.find(e => e["commandEnum"] == commandEnum);
-    }
+		return this.initializedCommands.find(
+			(e) => e["commandEnum"] == commandEnum
+		);
+	}
 
-    getCommand(commandEnum: string): SlashCommand {
-        return this.commands.find(e => e["commandEnum"] == commandEnum);
-    }
+	getCommand(commandEnum: string): SlashCommand {
+		return this.commands.find((e) => e["commandEnum"] == commandEnum);
+	}
 }

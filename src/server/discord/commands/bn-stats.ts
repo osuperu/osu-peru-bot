@@ -5,6 +5,7 @@ import { OsuApi } from "../../util/api/osu-api";
 import { QatApi } from "../../util/api/qat-api";
 import { QatUser, UserActivity } from "../../models/qat-api/qat";
 import { BNStatsResponse } from "../responses/bn-stats";
+import { ErrorResponse } from "../responses/error";
 
 export default <SlashCommand>{
 	commandEnum: "BNSTATS",
@@ -27,7 +28,7 @@ export default <SlashCommand>{
 			required: false,
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
 		try {
 			const guildMember =
 				interaction.options.getUser("discord", false) ||
@@ -66,9 +67,7 @@ export default <SlashCommand>{
 			};
 		} catch (e) {
 			return {
-				message: {
-					content: "Error: " + e,
-				},
+				message: await new ErrorResponse().getMessage(e, logger),
 			};
 		}
 	},

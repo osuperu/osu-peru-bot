@@ -6,6 +6,7 @@ import { OScores } from "../../models/osu-api/score";
 import { OBeatmap } from "../../models/osu-api/beatmap";
 import { OsuApi } from "../../util/api/osu-api";
 import { CompareResponse } from "../responses/compare";
+import { ErrorResponse } from "../responses/error";
 
 export default <SlashCommand>{
 	commandEnum: "COMPARE",
@@ -52,7 +53,7 @@ export default <SlashCommand>{
 			required: false,
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
 		try {
 			const guildMember =
 				interaction.options.getUser("discord", false) ||
@@ -131,9 +132,7 @@ export default <SlashCommand>{
 			};
 		} catch (e) {
 			return {
-				message: {
-					content: "No se ha encontrado ningun beatmap a comparar.",
-				},
+				message: await new ErrorResponse().getMessage(e, logger),
 			};
 		}
 	},

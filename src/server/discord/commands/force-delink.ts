@@ -1,5 +1,6 @@
 import { User } from "../../models/user";
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
+import { ErrorResponse } from "../responses/error";
 import { ForceDelinkResponse } from "../responses/force-delink";
 
 export default <SlashCommand>{
@@ -36,29 +37,37 @@ export default <SlashCommand>{
 			],
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
-		const type = interaction.options.getSubcommand();
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
+		try {
+			const type = interaction.options.getSubcommand();
 
-		let user: User | null;
+			let user: User | null;
 
-		if (type == "discord") {
-			const guildMember = interaction.options.getUser("user", false);
+			if (type == "discord") {
+				const guildMember = interaction.options.getUser("user", false);
 
-			if (guildMember) {
-				user = await User.findOne({ "discord.userID": guildMember.id });
+				if (guildMember) {
+					user = await User.findOne({
+						"discord.userID": guildMember.id,
+					});
+				} else {
+					user = null;
+				}
+			} else if (type == "osu") {
+				user = await User.byOsuResolvable(
+					interaction.options.getString("user")
+				);
 			} else {
 				user = null;
 			}
-		} else if (type == "osu") {
-			user = await User.byOsuResolvable(
-				interaction.options.getString("user")
-			);
-		} else {
-			user = null;
-		}
 
-		return {
-			message: await new ForceDelinkResponse().getMessage(user),
-		};
+			return {
+				message: await new ForceDelinkResponse().getMessage(user),
+			};
+		} catch (e) {
+			return {
+				message: await new ErrorResponse().getMessage(e, logger),
+			};
+		}
 	},
 };

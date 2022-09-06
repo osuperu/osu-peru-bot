@@ -1,10 +1,11 @@
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
 import { User } from "../../models/user";
 import { OUser } from "../../models/osu-api/user";
-import { OScore } from "../../models/osu-api/score"
-import { OGamemodeName } from "../../models/osu-api/gamemode"
+import { OScore } from "../../models/osu-api/score";
+import { OGamemodeName } from "../../models/osu-api/gamemode";
 import { OsuApi } from "../../util/api/osu-api";
 import { RecentResponse } from "../responses/recent";
+import { ErrorResponse } from "../responses/error";
 
 export default <SlashCommand>{
 	commandEnum: "RECENT",
@@ -74,47 +75,63 @@ export default <SlashCommand>{
 			required: false,
 		},
 	],
-    async call({ interaction }): Promise<SlashCommandReturn> {
-        try {
-            const guildMember = interaction.options.getUser("discord", false) || interaction.member.user;
-            const userDb = await User.findOne({ "discord.userID": guildMember.id });
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
+		try {
+			const guildMember =
+				interaction.options.getUser("discord", false) ||
+				interaction.member.user;
+			const userDb = await User.findOne({
+				"discord.userID": guildMember.id,
+			});
 
 			if (!userDb) {
-                return {
-                    message: {
-                        content: "El usuario no tiene ninguna cuenta de osu! vinculada."
-                    }
-                }
-            }
+				return {
+					message: {
+						content:
+							"El usuario no tiene ninguna cuenta de osu! vinculada.",
+					},
+				};
+			}
 
-            const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
-            const gamemode = (interaction.options.getString("gamemode", false) || "osu") as OGamemodeName;
-            const offset = interaction.options.getInteger("offset", false) || 0;
-            const includeFails = (interaction.options.getString("fails", false) || "1") as "0" | "1";
+			const user =
+				interaction.options.getString("user", false) ||
+				(userDb ? userDb.osu.userID.toString() : null);
+			const gamemode = (interaction.options.getString(
+				"gamemode",
+				false
+			) || "osu") as OGamemodeName;
+			const offset = interaction.options.getInteger("offset", false) || 0;
+			const includeFails = (interaction.options.getString(
+				"fails",
+				false
+			) || "1") as "0" | "1";
 
 			const osuUser = (await OsuApi.fetchUserPublic(
-                user,
-                gamemode
-            )) as OUser;
+				user,
+				gamemode
+			)) as OUser;
 
-            const ret = (await OsuApi.fetchUserRecentPlay(
-                osuUser.id,
-                gamemode,
-                1, // Return just 1 play
-                offset,
-                includeFails
-            ))[0] as OScore;
+			const ret = (
+				await OsuApi.fetchUserRecentPlay(
+					osuUser.id,
+					gamemode,
+					1, // Return just 1 play
+					offset,
+					includeFails
+				)
+			)[0] as OScore;
 
-            return {
-                message: await (new RecentResponse).getMessage(osuUser, ret, gamemode)
-            }
-
-        } catch (e) {
 			return {
-                message: {
-                    content: "El usuario no tiene plays recientes en ese modo de juego."
-                }
-            }
-        }
-    }
+				message: await new RecentResponse().getMessage(
+					osuUser,
+					ret,
+					gamemode
+				),
+			};
+		} catch (e) {
+			return {
+				message: await new ErrorResponse().getMessage(e, logger),
+			};
+		}
+	},
 };

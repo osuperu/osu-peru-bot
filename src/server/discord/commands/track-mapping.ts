@@ -2,6 +2,7 @@ import { OUser } from "../../models/osu-api/user";
 import { User, UserMappingTrack } from "../../models/user";
 import { OsuApi } from "../../util/api/osu-api";
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
+import { ErrorResponse } from "../responses/error";
 import { TrackMappingResponse } from "../responses/track-mapping";
 
 export default <SlashCommand>{
@@ -17,7 +18,7 @@ export default <SlashCommand>{
 			required: true,
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
 		try {
 			const userDb = await User.findOne({
 				"discord.userID": interaction.member.user.id,
@@ -55,9 +56,7 @@ export default <SlashCommand>{
 			};
 		} catch (e) {
 			return {
-				message: {
-					content: "El usuario no existe.",
-				},
+				message: await new ErrorResponse().getMessage(e, logger),
 			};
 		}
 	},
