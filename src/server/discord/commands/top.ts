@@ -1,10 +1,11 @@
 import { SlashCommand, SlashCommandReturn } from "../models/slash-command";
 import { User } from "../../models/user";
 import { OUser } from "../../models/osu-api/user";
-import { OScore } from "../../models/osu-api/score"
+import { OScore } from "../../models/osu-api/score";
 import { TopResponse } from "../responses/top";
 import { OsuApi } from "../../util/api/osu-api";
 import { OGamemodeName } from "../../models/osu-api/gamemode";
+import { ErrorResponse } from "../responses/error";
 
 export default <SlashCommand>{
 	commandEnum: "TOP",
@@ -58,7 +59,7 @@ export default <SlashCommand>{
 			required: false,
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
 		try {
 			const guildMember =
 				interaction.options.getUser("discord", false) ||
@@ -77,31 +78,39 @@ export default <SlashCommand>{
 				};
 			}
 
-			const user = interaction.options.getString("user", false) || (userDb ? userDb.osu.userID.toString() : null);
-            const gamemode = (interaction.options.getString("gamemode", false) || "osu") as OGamemodeName;
-            const offset = interaction.options.getInteger("offset", false) || 0;
+			const user =
+				interaction.options.getString("user", false) ||
+				(userDb ? userDb.osu.userID.toString() : null);
+			const gamemode = (interaction.options.getString(
+				"gamemode",
+				false
+			) || "osu") as OGamemodeName;
+			const offset = interaction.options.getInteger("offset", false) || 0;
 
-            const osuUser = (await OsuApi.fetchUserPublic(
-                user,
-                gamemode
-            )) as OUser;
+			const osuUser = (await OsuApi.fetchUserPublic(
+				user,
+				gamemode
+			)) as OUser;
 
-			const ret = await OsuApi.fetchUserTopPlays(
-                osuUser.id,
-                gamemode,
-                5, // Return 5 plays
-                offset
-            ) as OScore[];
+			const ret = (await OsuApi.fetchUserTopPlays(
+				osuUser.id,
+				gamemode,
+				5, // Return 5 plays
+				offset
+			)) as OScore[];
 
-            return {
-                message: await (new TopResponse).getMessage(osuUser, ret, gamemode, offset)
-            }
+			return {
+				message: await new TopResponse().getMessage(
+					osuUser,
+					ret,
+					gamemode,
+					offset
+				),
+			};
 		} catch (e) {
 			return {
-                message: {
-                    content: "El usuario no existe.",
-                }
-            }
+				message: await new ErrorResponse().getMessage(e, logger),
+			};
 		}
 	},
 };

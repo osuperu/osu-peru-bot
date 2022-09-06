@@ -3,6 +3,7 @@ import { User, UserMappingTrack } from "../../models/user";
 import { UntrackMappingResponse } from "../responses/untrack-mapping";
 import { OsuApi } from "../../util/api/osu-api";
 import { OUser } from "../../models/osu-api/user";
+import { ErrorResponse } from "../responses/error";
 
 export default <SlashCommand>{
 	commandEnum: "UNTRACKMAPPING",
@@ -17,7 +18,7 @@ export default <SlashCommand>{
 			required: true,
 		},
 	],
-	async call({ interaction }): Promise<SlashCommandReturn> {
+	async call({ interaction, logger }): Promise<SlashCommandReturn> {
 		try {
 			const userDb = await User.findOne({
 				"discord.userID": interaction.member.user.id,
@@ -52,9 +53,7 @@ export default <SlashCommand>{
 			};
 		} catch (e) {
 			return {
-				message: {
-					content: "El usuario no existe.",
-				},
+				message: await new ErrorResponse().getMessage(e, logger),
 			};
 		}
 	},

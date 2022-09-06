@@ -1,4 +1,5 @@
 import { CommandInteraction, MessageOptions, ChatInputApplicationCommandData } from "discord.js";
+import Winston from 'winston';
 
 export interface SlashCommand extends ChatInputApplicationCommandData {
 	commandEnum: string;
@@ -13,4 +14,5 @@ export interface SlashCommandReturn {
 
 export interface SlashCommandObject {
 	interaction: CommandInteraction;
+	logger?: Winston.Logger
 }
