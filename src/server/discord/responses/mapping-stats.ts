@@ -16,12 +16,12 @@ export class MappingStatsResponse implements CommandResponse {
                         url: user.avatar_url,
                     },
                     description:
-                        `▸ **Graveyarded maps:** ${user.graveyard_beatmapset_count}` + "\n" +
-                        `▸ **Pending maps:** ${user.pending_beatmapset_count}` + "\n" +
-                        `▸ **Loved maps:** ${user.loved_beatmapset_count}` + "\n" +
-                        `▸ **Ranked and approved maps:** ${user.ranked_beatmapset_count}`,
+                        `▸ **Mapas abandonados:** ${user.graveyard_beatmapset_count}` + "\n" +
+                        `▸ **Mapas pendientes:** ${user.pending_beatmapset_count}` + "\n" +
+                        `▸ **Mapas amados:** ${user.loved_beatmapset_count}` + "\n" +
+                        `▸ **Mapas rankeados y aprobados:** ${user.ranked_beatmapset_count}`,
                     footer: {
-                        text: `Kudosu Available: ${user.kudosu.available}/${user.kudosu.total}`,
+                        text: `Kudosu disponible: ${user.kudosu.available}/${user.kudosu.total}`,
                     },
                 }
             ]
