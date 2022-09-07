@@ -5,12 +5,17 @@ import { OEventBeatmapsetUpload } from "../models/osu-api/event";
 import { Script } from "../models/script";
 import { UserMappingTrack } from "../models/user";
 import { OsuApi } from "../util/api/osu-api";
+import { Logger } from "../util/logger";
 import { Misc } from "../util/misc";
 
 export default class MappingTracking implements Script {
+	logger = Logger.get("scripts/mapping-tracking");
+
 	async run(): Promise<void> {
-		await UserMappingTrack.find().then((users) =>
-			users.forEach(async (user) => {
+		try {
+			const users = await UserMappingTrack.find();
+
+			for (const user of users) {
 				const events = (await OsuApi.fetchRecentActivity(
 					user.userID,
 					10,
@@ -50,10 +55,12 @@ export default class MappingTracking implements Script {
 									let description = "";
 									for (const beatmap of beatmapset.beatmaps) {
 										if (beatmap.difficulty_rating < 0.01) {
-											_lastUpdated = new Date(_createdAt.getTime() - 1000);
+											_lastUpdated = new Date(
+												_createdAt.getTime() - 1000
+											);
 											break;
 										}
-										
+
 										description +=
 											`${Misc.getStarRatingEmoji(
 												beatmap.difficulty_rating
@@ -100,7 +107,12 @@ export default class MappingTracking implements Script {
 						await user.save();
 					}
 				}
-			})
-		);
+			}
+		} catch (error) {
+			this.logger.error(
+				`Ocurrió un problema al intentar obtener las actividades recientes del usuario.`,
+				{ error }
+			);
+		}
 	}
 }
