@@ -34,7 +34,7 @@ export default class MappingTracking implements Script {
 
 					let _lastUpdated: Date;
 
-					for (const event of events) {
+					loopEvents: for (const event of events) {
 						if (event.type === "beatmapsetUpload") {
 							const _createdAt = new Date(event.created_at);
 
@@ -58,7 +58,7 @@ export default class MappingTracking implements Script {
 											_lastUpdated = new Date(
 												_createdAt.getTime() - 1000
 											);
-											break;
+											break loopEvents;
 										}
 
 										description +=
