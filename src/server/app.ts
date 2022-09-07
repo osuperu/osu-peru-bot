@@ -1,6 +1,6 @@
 import express from "express";
-import http, { Server } from "http";
-import mongoose, { mongo } from "mongoose";
+import http from "http";
+import mongoose from "mongoose";
 import path from "path";
 
 import { DateTime } from "luxon";
