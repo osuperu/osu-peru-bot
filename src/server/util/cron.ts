@@ -49,13 +49,13 @@ export class Cron {
 		);
 
 		this.tasks.push(
-			new CronJob("* * * * *", async () => {
-				// Every minute
+			new CronJob("*/10 * * * *", async () => {
+				// Every 10 minutes
 				try {
 					await new MappingTracking().run();
 				} catch (err) {
 					this.logger.error(
-						"An error occured while executing osu tracking task!",
+						"An error occured while executing osu! tracking task!",
 						{ err }
 					);
 				}

@@ -18,7 +18,7 @@ export default class MappingTracking implements Script {
 			for (const user of users) {
 				const events = (await OsuApi.fetchRecentActivity(
 					user.userID,
-					10,
+					100,
 					0
 				)) as OEventBeatmapsetUpload[];
 
