@@ -35,7 +35,15 @@ export class DiscordClient {
 		this.messageCreateManager = new MessageCreateManager();
 
 		this.discordClient.on("ready", () => {
+			logger.info("Bot conectado correctamente a discord.");
 			this.commandManager.init();
+			logger.info("Inicializando comandos slash...");
+		});
+
+		this.discordClient.on("error", () => {
+			logger.info(
+				"Ha ocurrido un error con la conexión del bot de discord."
+			);
 		});
 
 		this.discordClient.on("interactionCreate", async (interaction) => {
@@ -54,12 +62,17 @@ export class DiscordClient {
 		await this.discordClient
 			.login(token)
 			.then(() => {
-				logger.info("El bot se ha conectado correctamente a discord.");
+				logger.info(
+					"El bot ha iniciado sesión correctamente a discord."
+				);
 			})
 			.catch((error) => {
-				logger.error("El bot no se ha podido conectar a discord.", {
-					error,
-				});
+				logger.error(
+					"El bot no ha podido iniciar sesión correctamente a discord.",
+					{
+						error,
+					}
+				);
 			});
 	}
 
