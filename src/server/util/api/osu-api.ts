@@ -1,4 +1,5 @@
 import axios from "axios";
+import rateLimit from "axios-rate-limit";
 
 import { OCodeExchange } from "../../models/osu-api/oauth-access";
 import { OGamemodeName } from "../../models/osu-api/gamemode";
@@ -6,11 +7,14 @@ import { Misc } from "../misc";
 import { DateTime } from "luxon";
 
 import { App } from "../../app";
-
 export class OsuApi {
+	private static axiosRatedLimited = rateLimit(axios.create(), {
+		maxRPS: 5,
+	});
+
 	static async refreshAccessToken(refresh_token: string): Promise<unknown> {
 		return (
-			await axios({
+			await this.axiosRatedLimited({
 				method: "post",
 				url: "https://osu.ppy.sh/oauth/token",
 				data: {
@@ -30,7 +34,7 @@ export class OsuApi {
 		endpoint: string;
 		accessToken?: string;
 	}): Promise<unknown> {
-		const response = await axios(endpoint, {
+		const response = await this.axiosRatedLimited(endpoint, {
 			baseURL: "https://osu.ppy.sh/api/v2",
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
@@ -48,12 +52,15 @@ export class OsuApi {
 		)
 			return;
 		const response = (
-			await axios.post<OCodeExchange>("https://osu.ppy.sh/oauth/token", {
-				grant_type: "client_credentials",
-				scope: "public",
-				client_id: App.instance.config.osu.oauth.clientID,
-				client_secret: App.instance.config.osu.oauth.clientSecret,
-			})
+			await this.axiosRatedLimited.post<OCodeExchange>(
+				"https://osu.ppy.sh/oauth/token",
+				{
+					grant_type: "client_credentials",
+					scope: "public",
+					client_id: App.instance.config.osu.oauth.clientID,
+					client_secret: App.instance.config.osu.oauth.clientSecret,
+				}
+			)
 		).data;
 
 		App.instance.clientCredential = {
@@ -82,7 +89,7 @@ export class OsuApi {
 		gamemode: OGamemodeName
 	): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/users/${userID}/${gamemode}${
 				Misc.isNumeric(userID) ? "" : "?key=username"
 			}`,
@@ -98,7 +105,7 @@ export class OsuApi {
 		includeFails: "0" | "1"
 	): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/users/${userid}/scores/recent?include_fails=${includeFails}&mode=${gamemode}&limit=${limit}&offset=${offset}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -111,7 +118,7 @@ export class OsuApi {
 		offset: number
 	): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/users/${userid}/scores/best?mode=${gamemode}&limit=${limit}&offset=${offset}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -123,7 +130,7 @@ export class OsuApi {
 		gamemode?: OGamemodeName
 	): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/beatmaps/${beatmapID}/scores/users/${userID}/all?mode=${gamemode}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -131,7 +138,7 @@ export class OsuApi {
 
 	static async fetchBeatmap(beatmapID: number): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/beatmaps/${beatmapID}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -147,7 +154,7 @@ export class OsuApi {
 				}
 			}
 		}
-		return this.request({
+		return await this.request({
 			endpoint: `/beatmaps${queryParameter}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -155,7 +162,7 @@ export class OsuApi {
 
 	static async fetchBeatmapset(beatmapsetID: number): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/beatmapsets/${beatmapsetID}`,
 			accessToken: App.instance.clientCredential.token,
 		});
@@ -167,7 +174,7 @@ export class OsuApi {
 		offset: number
 	): Promise<unknown> {
 		await this.refreshClientCredential();
-		return this.request({
+		return await this.request({
 			endpoint: `/users/${userid}/recent_activity?limit=${limit}&offset=${offset}`,
 			accessToken: App.instance.clientCredential.token,
 		});
