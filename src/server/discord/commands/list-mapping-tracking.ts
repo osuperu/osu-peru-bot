@@ -33,9 +33,10 @@ export default <SlashCommand>{
 				};
 			}
 
-			const isAnyUserInTracking = await UserMappingTrack.findOne();
+			const totalTrackedUsers = (await UserMappingTrack.find()
+				.count()) as number;
 
-			if (!isAnyUserInTracking) {
+			if (totalTrackedUsers === 0) {
 				return {
 					message: {
 						content: `Ningún jugador está siendo trackeado por el momento.`,
@@ -50,9 +51,13 @@ export default <SlashCommand>{
 				.skip(offset * limit)
 				.limit(limit)) as UserMappingTrack[];
 
+			const totalPages = (totalTrackedUsers % 10 === 0 ?
+				Math.floor(totalTrackedUsers / limit):
+				Math.floor(totalTrackedUsers / limit) + 1);
+
 			return {
 				message: await new ListMappingTrackingResponse().getMessage(
-					ret, offset,
+					ret, offset, totalPages
 				),
 			};
 		} catch (e) {

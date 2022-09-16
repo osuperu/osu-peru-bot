@@ -6,14 +6,15 @@ import { OsuApi } from "../../util/api/osu-api";
 
 export class ListMappingTrackingResponse implements CommandResponse {
 	async getMessage(
-		UsersInTracking: UserMappingTrack[],
-		offset: number
+		usersInTracking: UserMappingTrack[],
+		offset: number,
+		totalPages: number
 	): Promise<MessageOptions> {
 		let user: OUser = null;
 		let content = "";
-		for (const TrackedUser of UsersInTracking) {
+		for (const trackedUser of usersInTracking) {
 			user = (await OsuApi.fetchUserPublic(
-				TrackedUser.userID.toString(),
+				trackedUser.userID.toString(),
 				"osu"
 			)) as OUser;
 			content += `▸ ${user.username}` + "\n";
@@ -25,7 +26,7 @@ export class ListMappingTrackingResponse implements CommandResponse {
 					title: `Mostrando usuarios trackeados`,
 					description: content,
 					footer: {
-						text: `Pagina ${offset + 1}`,
+						text: `Pagina ${offset + 1}/${totalPages}`,
 					},
 				},
 			],
