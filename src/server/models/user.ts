@@ -14,6 +14,7 @@ import { UserSchema } from "./mongo-schemas/user-schema";
 import { TrackingSchema } from "./mongo-schemas/tracking-schema";
 
 import { Logger } from "../util/logger";
+import { EventSchema } from './mongo-schemas/event-schema';
 const logger = Logger.get("UserModel");
 
 export interface OsuInformation extends Mongoose.Types.Subdocument {
@@ -58,6 +59,11 @@ export interface UserInformation {
 	remainingDelinkTime?: number;
 }
 
+export interface VotingUserInformation {
+	userID: number;
+	voters: number[];
+}
+
 export interface User extends Mongoose.Document {
 	registration: Date;
 	lastLogin: Date;
@@ -72,6 +78,17 @@ export interface User extends Mongoose.Document {
 export interface UserMappingTrack extends Mongoose.Document {
 	userID: number;
 	lastUpdated: Date;
+}
+
+export interface Event extends Mongoose.Document {
+	startDate: Date;
+	endDate: Date;
+	title: string;
+	competitors?: VotingUserInformation[];
+	participants?: VotingUserInformation[];
+
+	isVoted(): boolean;
+	isActive(): boolean;
 }
 
 export interface UserModel extends Mongoose.Model<User> {
@@ -164,13 +181,13 @@ DiscordInformationSchema.methods.updateUser = async function (
 				if ((this.ownerDocument() as User).osu?.playmode == playmode)
 					addArray.push(
 						App.instance.config.discord.roles.playModeRoles[
-							playmode
+						playmode
 						]
 					);
 				else
 					removeArray.push(
 						App.instance.config.discord.roles.playModeRoles[
-							playmode
+						playmode
 						]
 					);
 			}
@@ -271,10 +288,8 @@ DiscordInformationSchema.methods.delink = async function (
 			"error",
 			`**[${(
 				this.ownerDocument() as User
-			).getUsername()}](https://osu.ppy.sh/users/${
-				(this.ownerDocument() as User).osu.userID
-			})** \`Discord ID: ${
-				this.userID
+			).getUsername()}](https://osu.ppy.sh/users/${(this.ownerDocument() as User).osu.userID
+			})** \`Discord ID: ${this.userID
 			}\` has **delinked** their Discord account.`
 		);
 		this.lastUpdated = DateTime.now().toJSDate();
@@ -365,6 +380,24 @@ UserSchema.methods.getUsername = function (this: User): string {
 		return "Unknown"; // ¿Por modificar?
 	}
 };
+
+EventSchema.methods.isVoted = function (this: Event): boolean {
+	for (const competitor of this.competitors) {
+		if (competitor.userID){
+			return true;
+		}
+	}
+	return false;
+}
+
+EventSchema.methods.isActive = function (this: Event): boolean {
+	const currentDate = DateTime.now().toJSDate();
+	if (this.startDate <= currentDate && currentDate <= this.endDate) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 export const User: UserModel = Mongoose.model<User>(
 	"User",
